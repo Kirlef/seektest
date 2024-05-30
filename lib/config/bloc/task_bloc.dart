@@ -1,38 +1,45 @@
 import 'dart:async';
+  import 'package:bloc/bloc.dart';
+  import 'package:equatable/equatable.dart';
+  import 'package:seektest/domain/models/task.dart';
+  import 'package:shared_preferences/shared_preferences.dart';
+  import 'package:uuid/uuid.dart';
 
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:seektest/domain/models/task.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/uuid.dart';
+  import '../../infraestructure/driven_adapter/database/db_helper.dart';
 
-import '../../infraestructure/driven_adapter/database/db_helper.dart';
+  part 'task_event.dart';
+  part 'task_state.dart';
 
-part 'task_event.dart';
-part 'task_state.dart';
-
-class TaskBloc extends Bloc<TaskEvent, TaskState> {
+  /// Bloc to manage task-related events and states.
+  class TaskBloc extends Bloc<TaskEvent, TaskState> {
   TaskBloc() : super(const TaskState(taskModel: [])) {
-    on<ShowDataEvent>(showData);
-    on<AddDataEvent>(addTask);
-    on<UpdateDataEvent>(updateTask);
-    on<DeleteDataEvent>(deleteTask);
+  on<ShowDataEvent>(showData);
+  on<AddDataEvent>(addTask);
+  on<UpdateDataEvent>(updateTask);
+  on<DeleteDataEvent>(deleteTask);
   }
 
-   Future<String> getValueFilter() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? value= "";
-    try{
-      value =  await prefs.getString('filter');
-      if(value == null || value == "")
-        value = "pending";
-
-    }catch(e){
-      print(e);
-    }
-   return value!;
+  /// Retrieves the current value of the filter from shared preferences.
+  ///
+  /// Returns a [String] representing the filter value, defaulting to "pending" if not set.
+  Future<String> getValueFilter() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? value = "";
+  try {
+  value = await prefs.getString('filter');
+  if (value == null || value == "") {
+  value = "pending";
+  }
+  } catch (e) {
+  print(e);
+  }
+  return value!;
   }
 
+  /// Handles the [ShowDataEvent] by fetching and emitting the list of tasks based on the current filter.
+  ///
+  /// [event] The event that triggered this method.
+  /// [emit] The emitter to update the state.
   Future showData(ShowDataEvent event, Emitter<TaskState> emit) async {
     String value  = await getValueFilter();
     final dataList = await DBHelper.selectAll(value);
@@ -49,7 +56,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(state.copyWith(taskModel: list));
   }
 
-
+  /// Handles the [AddDataEvent] by adding a new task to the database and updating the state.
+  ///
+  /// [event] The event that triggered this method.
+  /// [emit] The emitter to update the state.
   Future<void> addTask(AddDataEvent event, Emitter<TaskState> emit) async {
     Uuid uuid = const Uuid();
     final list = Task(
@@ -70,6 +80,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(state.copyWith(taskModel: newTodos));
   }
 
+  /// Handles the [DeleteDataEvent] by deleting a task from the database and updating the state.
+  ///
+  /// [event] The event that triggered this method.
+  /// [emit] The emitter to update the state.
   Future<void> deleteTask(
       DeleteDataEvent event, Emitter<TaskState> emit) async {
     final deleteObject =
@@ -78,6 +92,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(state.copyWith(taskModel: deleteObject));
   }
 
+  /// Handles the [UpdateDataEvent] by updating a task in the database and updating the state.
+  ///
+  /// [event] The event that triggered this method.
+  /// [emit] The emitter to update the state.
   Future<void> updateTask(
       UpdateDataEvent event, Emitter<TaskState> emit) async {
     final list = state.taskModel.map((Task todoModel) {
