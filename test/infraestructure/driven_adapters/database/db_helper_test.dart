@@ -7,7 +7,6 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() {
-    // Inicializa databaseFactory para sqflite_common_ffi
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   });
@@ -18,7 +17,6 @@ void main() {
       final dbPath = await getDatabasesPath();
       final path = join(dbPath, 'taskseek.db');
 
-      // Borrar la base de datos de prueba antes de cada prueba
       await deleteDatabase(path);
     });
 
