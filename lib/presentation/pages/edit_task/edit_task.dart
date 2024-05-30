@@ -113,7 +113,7 @@ class _EditTodoScreenState extends State<EditTaskScreen> {
                             id: widget.id,
                             title: titleController.text,
                             desc: descriptionController.text,
-                            state: widget.state == "done" ? "Done":"Pending",
+                            state: widget.state,
                           );
                           context.read<TaskBloc>().add(UpdateDataEvent(todoList));
 
