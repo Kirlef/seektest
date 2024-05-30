@@ -1,23 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:seektest/screen/first_screen.dart';
-
-import 'bloc/todo_bloc.dart';
+import 'app/app.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TodoBloc(),
-      child: MaterialApp(
-        home: FirstScreen(),
-      ),
-    );
-  }
-}

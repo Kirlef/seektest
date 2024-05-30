@@ -2,15 +2,18 @@
 
 Seek Test
 
-## Getting Started
+## Function:
 
-This project is a starting point for a Flutter application.
+Task App allows you to create a to-do list and a description, edit and delete it.
 
-A few resources to get you started if this is your first Flutter project:
+When creating a task you can access the options by swiping left on the task to see the options.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Compile project:
+please in terminal run:
+flutter clean
+flutter pub get
+after this must run the project
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Unit Test:
+The project's unit tests can be viewed in the coverage/html folder by opening index.html to view the lines of code and their coverage.
+
